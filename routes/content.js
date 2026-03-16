@@ -68,7 +68,7 @@ router.post('/upload', protect, admin, upload.single('image'), (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: 'Image file is required' });
     }
-    const imageUrl = `/uploads/${req.file.filename}`;
+    const imageUrl = req.file.path;
     res.json({ imageUrl });
   } catch (error) {
     res.status(400).json({ message: error.message });

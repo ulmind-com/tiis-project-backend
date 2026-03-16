@@ -3,6 +3,8 @@ const router = express.Router();
 const Portfolio = require('../models/Portfolio');
 const { protect, admin } = require('../middleware/authMiddleware');
 
+const upload = require('../middleware/uploadMiddleware');
+
 // @desc    Get all portfolio items
 // @route   GET /api/portfolio
 // @access  Public
@@ -18,9 +20,13 @@ router.get('/', async (req, res) => {
 // @desc    Create a portfolio item
 // @route   POST /api/portfolio
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), async (req, res) => {
   try {
-    const item = new Portfolio(req.body);
+    const itemData = { ...req.body };
+    if (req.file) {
+        itemData.imageUrl = req.file.path;
+    }
+    const item = new Portfolio(itemData);
     const createdItem = await item.save();
     res.status(201).json(createdItem);
   } catch (error) {
@@ -31,11 +37,15 @@ router.post('/', protect, admin, async (req, res) => {
 // @desc    Update a portfolio item
 // @route   PUT /api/portfolio/:id
 // @access  Private/Admin
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, admin, upload.single('image'), async (req, res) => {
   try {
     const item = await Portfolio.findById(req.params.id);
     if (item) {
-      Object.assign(item, req.body);
+      const updateData = { ...req.body };
+      if (req.file) {
+          updateData.imageUrl = req.file.path;
+      }
+      Object.assign(item, updateData);
       const updatedItem = await item.save();
       res.json(updatedItem);
     } else {

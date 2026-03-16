@@ -15,7 +15,7 @@ router.post('/', upload.single('attachment'), async (req, res) => {
     const enquiryData = { ...req.body };
     
     if (req.file) {
-      enquiryData.attachmentUrl = `/uploads/${req.file.filename}`;
+      enquiryData.attachmentUrl = req.file.path;
     }
 
     const enquiry = new Enquiry(enquiryData);

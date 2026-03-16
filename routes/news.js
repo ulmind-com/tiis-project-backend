@@ -3,6 +3,8 @@ const router = express.Router();
 const News = require('../models/News');
 const { protect, admin } = require('../middleware/authMiddleware');
 
+const upload = require('../middleware/uploadMiddleware');
+
 router.get('/', async (req, res) => {
   try {
     // Only fetch published news for public
@@ -22,9 +24,13 @@ router.get('/admin', protect, admin, async (req, res) => {
   }
 });
 
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), async (req, res) => {
   try {
-    const item = new News(req.body);
+    const newsData = { ...req.body };
+    if (req.file) {
+      newsData.imageUrl = req.file.path;
+    }
+    const item = new News(newsData);
     const createdItem = await item.save();
     res.status(201).json(createdItem);
   } catch (error) {
@@ -32,11 +38,15 @@ router.post('/', protect, admin, async (req, res) => {
   }
 });
 
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, admin, upload.single('image'), async (req, res) => {
   try {
     const item = await News.findById(req.params.id);
     if (item) {
-      Object.assign(item, req.body);
+      const updateData = { ...req.body };
+      if (req.file) {
+        updateData.imageUrl = req.file.path;
+      }
+      Object.assign(item, updateData);
       const updatedItem = await item.save();
       res.json(updatedItem);
     } else {

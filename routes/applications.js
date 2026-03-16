@@ -148,7 +148,7 @@ router.post('/', upload.single('cv'), async (req, res) => {
 
     const applicationData = {
       ...req.body,
-      cvUrl: `/uploads/${req.file.filename}`,
+      cvUrl: req.file.path,
     };
 
     const application = new Application(applicationData);
