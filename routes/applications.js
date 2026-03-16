@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Application = require('../models/Application');
+const Job = require('../models/Job'); // Require Job model to prevent MissingSchemaError on populate
 const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 const { Resend } = require('resend');

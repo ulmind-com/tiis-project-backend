@@ -51,7 +51,7 @@ router.post('/', upload.single('attachment'), async (req, res) => {
 // @desc    Get all enquiries
 // @route   GET /api/enquiries
 // @access  Private/Admin
-router.get('/', protect, admin, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const enquiries = await Enquiry.find({}).sort({ createdAt: -1 });
     res.json(enquiries);

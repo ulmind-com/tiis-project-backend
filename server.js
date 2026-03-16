@@ -35,14 +35,10 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to database and start server
+// Connect to database completely asynchronously so backend doesn't crash on boot if MongoDB Atlas drops the connection timeout
 const connectDB = require('./config/db');
+connectDB();
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-  });
-}).catch(err => {
-  console.log('Failed to connect to database', err);
-  process.exit(1);
+app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
