@@ -24,7 +24,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5000000 }, // 5MB max
+  limits: { fileSize: 15000000 }, // 15MB max
 });
 
 module.exports = upload;
