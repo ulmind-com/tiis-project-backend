@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
 const { protect, admin } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
 // @desc    Get all active jobs
 // @route   GET /api/jobs
@@ -36,9 +37,13 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a job
 // @route   POST /api/jobs
 // @access  Private/Admin
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), async (req, res) => {
   try {
-    const job = new Job(req.body);
+    const jobData = { ...req.body };
+    if (req.file) {
+      jobData.image = req.file.path;
+    }
+    const job = new Job(jobData);
     const createdJob = await job.save();
     res.status(201).json(createdJob);
   } catch (error) {
@@ -49,11 +54,15 @@ router.post('/', protect, admin, async (req, res) => {
 // @desc    Update a job
 // @route   PUT /api/jobs/:id
 // @access  Private/Admin
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, admin, upload.single('image'), async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
     if (job) {
-      Object.assign(job, req.body);
+      const jobData = { ...req.body };
+      if (req.file) {
+        jobData.image = req.file.path;
+      }
+      Object.assign(job, jobData);
       const updatedJob = await job.save();
       res.json(updatedJob);
     } else {
