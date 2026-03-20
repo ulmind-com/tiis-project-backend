@@ -144,4 +144,30 @@ router.put('/change-password/:id', protect, admin, async (req, res) => {
   }
 });
 
+// @desc    Delete an admin
+// @route   DELETE /api/auth/admins/:id
+// @access  Private/Admin
+router.delete('/admins/:id', protect, admin, async (req, res) => {
+  try {
+    const adminIdToDelete = req.params.id;
+    
+    // Prevent admin from deleting themselves
+    if (adminIdToDelete === req.user._id.toString()) {
+      return res.status(403).json({ message: 'You cannot delete your own admin account.' });
+    }
+
+    const adminToDelete = await User.findById(adminIdToDelete);
+    
+    if (!adminToDelete) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    await User.findByIdAndDelete(adminIdToDelete);
+    res.json({ message: 'Admin deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;
