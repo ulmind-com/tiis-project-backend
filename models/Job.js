@@ -25,6 +25,11 @@ const JobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    enum: ['Open Position', 'Caregivers Enroll', 'TIIS Openings'],
+    default: 'Open Position'
+  },
   isActive: {
     type: Boolean,
     default: true
