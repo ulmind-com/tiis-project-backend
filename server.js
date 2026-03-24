@@ -43,6 +43,7 @@ app.use('/api/content', require('./routes/content'));
 app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/applications', require('./routes/applications'));
 app.use('/api/enquiries', require('./routes/enquiries'));
+app.use('/api/caregiver-enquiries', require('./routes/caregiverEnquiries'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/news', require('./routes/news'));
 app.use('/api/team', require('./routes/team'));
