@@ -13,8 +13,8 @@ const setupAdmin = async () => {
     let admin = await User.findOne({ email: 'admin@tiis.co.in' });
     
     if (admin) {
-      console.log('Admin user found. Updating password to abc123');
-      admin.password = 'abc123';
+      console.log('Admin user found. Updating password to Tiis@2026');
+      admin.password = 'Tiis@2026';
       await admin.save();
       console.log('Admin password updated successfully!');
     } else {
@@ -22,11 +22,11 @@ const setupAdmin = async () => {
       admin = new User({
         name: 'Admin User',
         email: 'admin@tiis.co.in',
-        password: 'abc123',
+        password: 'Tiis@2026',
         role: 'admin'
       });
       await admin.save();
-      console.log('Admin user created successfully with password abc123!');
+      console.log('Admin user created successfully with password Tiis@2026!');
     }
 
     process.exit(0);

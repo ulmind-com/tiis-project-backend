@@ -11,6 +11,25 @@ const generateToken = (id) => {
   });
 };
 
+// @desc    TEMP: Emergency password reset (delete after use)
+// @route   POST /api/auth/emergency-reset
+// @access  Protected by secret key
+router.post('/emergency-reset', async (req, res) => {
+  const { secret, email, newPassword } = req.body;
+  if (secret !== 'TIIS_RESET_2026_XK9') {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.password = newPassword;
+    await user.save();
+    res.json({ message: `Password reset successful for ${email}` });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // @desc    Register a generic admin (For initial setup)
 // @route   POST /api/auth/register
 // @access  Public (should be locked down in production)
