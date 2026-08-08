@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 
 // REPLACE THIS WITH YOUR OLD DATABASE URI
-const OLD_DB_URI = "mongodb+srv://<OLD_USER>:<OLD_PASSWORD>@<OLD_CLUSTER>/<OLD_DB>?retryWrites=true&w=majority";
+const OLD_DB_URI = "mongodb+srv://Sagnik_db_healthy_motive:Healthy%4027@cluster0.fefdewd.mongodb.net/?appName=Cluster0";
 
 // THE NEW DATABASE URI YOU PROVIDED
 const NEW_DB_URI = "mongodb+srv://tiisdigitalmarketingteam_db_user:x7RtAVxixbhvAslL@cluster0.shyu81i.mongodb.net/";
